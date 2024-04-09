@@ -37,6 +37,12 @@ public class PostagemController {
 		return ResponseEntity.ok(postagemRepository.findAll());
 	}
 	
+	//buscar por titulo
+	@GetMapping("/titulo/{titulo}")
+	public ResponseEntity<List<Postagem>> getByTitulo(@PathVariable String titulo){
+		return ResponseEntity.ok(postagemRepository.findAllByTituloContainingIgnoreCase(titulo));
+	}
+	
 	//buscar por id
 	@GetMapping("/{id}")
 	public ResponseEntity<Postagem> getById(@PathVariable Long id){
@@ -44,7 +50,6 @@ public class PostagemController {
 				.map(resp -> ResponseEntity.ok(resp))
 				.orElse(ResponseEntity.status(HttpStatus.NOT_FOUND).build());
 	}
-	
 	
 	//cadastrar
 	@PostMapping
@@ -73,3 +78,14 @@ public class PostagemController {
 		postagemRepository.deleteById(id);				
 	}
 }
+
+
+
+
+
+
+
+
+
+
+
