@@ -1,16 +1,19 @@
 package com.generation.blogpessoal.model;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 import org.hibernate.annotations.UpdateTimestamp;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
 
@@ -25,12 +28,20 @@ public class Tema {
 	@NotNull(message = "O Atributo descrição é obrigatório")
 	private String descricao;
 	
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "tema", cascade = CascadeType.REMOVE)
+	@JsonIgnoreProperties("tema")
+	private List<Postagem> postagem;
+	
+	public List<Postagem> getPostagem() {
+		return postagem;
+	}
+
+	public void setPostagem(List<Postagem> postagem) {
+		this.postagem = postagem;
+	}
+
 	@UpdateTimestamp
 	private LocalDateTime data;
-	
-	@ManyToOne
-	@JsonIgnoreProperties("postagem")
-	private Tema tema;
 	
 	public LocalDateTime getData() {
 		return data;
@@ -38,14 +49,6 @@ public class Tema {
 
 	public void setData(LocalDateTime data) {
 		this.data = data;
-	}
-
-	public Tema getTema() {
-		return tema;
-	}
-
-	public void setTema(Tema tema) {
-		this.tema = tema;
 	}
 
 	public void setId(Long id) {
